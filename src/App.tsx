@@ -1,10 +1,10 @@
-import './App.css';
+import MedicinesComp from './components/MedicinesTable'
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Medicine Management App</h1>
+      <MedicinesComp />;
       </header>
     </div>
   );
