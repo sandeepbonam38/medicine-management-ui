@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Table, message } from "antd";
+import { Card, Row, Col, message, Spin } from "antd";
 import { Medicine } from "../models/Medicine";
 import { getMedicines } from "../services/medicineService";
 
@@ -9,42 +9,10 @@ const MedicinesTable: React.FC = () => {
   const [data, setData] = useState<Medicine[]>([]);
   const [loading, setLoading] = useState(false);
 
- //Table Columns
-  const columns = [
-    {
-      title: "Full Name",
-      dataIndex: "fullName",
-      key: "fullName",
-    },
-    {
-      title: "Notes",
-      dataIndex: "notes",
-      key: "notes",
-    },
-    {
-      title: "Expiry Date",
-      dataIndex: "expiryDate",
-      key: "expiryDate",
-    },
-    {
-      title: "Quantity",
-      dataIndex: "quantity",
-      key: "quantity",
-    },
-    {
-      title: "Price",
-      dataIndex: "price",
-      key: "price",
-    },
-    {
-      title: "Brand",
-      dataIndex: "brand",
-      key: "brand",
-    },
-  ];
+ 
 
   //Data Fetching
-  const fetchDate = async () =>{
+  const fetchMedicines = async () =>{
       try {     
         setLoading(true);
         const result = await getMedicines();
@@ -56,21 +24,39 @@ const MedicinesTable: React.FC = () => {
       }
   }
 
+  //Page Load
   useEffect(() => {
-    fetchDate();
+    fetchMedicines();
   }, []);
 
-  
 
   return (
     <div style={{ padding: 20 }}>
-      <h2>Medicines List</h2>
+      <h2>💊 Medicines Grid</h2>
 
-      <Table columns={columns}
-        dataSource={data}
-        loading={loading}
-        rowKey="id"
-      />
+      {loading ? (
+        <div style={{ textAlign: "center", padding: 40 }}>
+          <Spin size="large" />
+        </div>
+      ) : data.length === 0 ? (
+        <div style={{ textAlign: "center", padding: 40 }}>
+          <h3>🚫 No Medicines Found</h3>
+        </div>
+      ) : (
+        <Row gutter={[16, 16]}>
+          {data.map((item) => (
+            <Col xs={24} sm={12} md={8} lg={6} key={item.id}>
+              <Card title={item.fullName} bordered>
+                <p><b>Notes:</b> {item.notes}</p>
+                <p><b>Expiry Date:</b> {item.expiryDate}</p>
+                <p><b>Quantity:</b> {item.quantity}</p>
+                <p><b>Price:</b> ₹{item.price}</p>
+                <p><b>Brand:</b> {item.brand}</p>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      )}
     </div>
   );
 };
