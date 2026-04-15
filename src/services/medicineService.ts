@@ -3,7 +3,7 @@ import { Medicine } from "../models/Medicine";
 
 export const getMedicines = async (): Promise<Medicine[]> => {
   try {
-    const { data } = await axiosClient.get<Medicine[]>("/medicines");
+    const { data } = await axiosClient.get<Medicine[]>("/MedicineController");
 
     if (!Array.isArray(data)) return [];
 
