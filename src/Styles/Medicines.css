@@ -14,17 +14,21 @@
   padding: 8px;
 }
 
-/* Card Border */
+.medicine-title {
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
 .medicine-card {
   border: 1px solid #d1d5db !important;
-  border-radius: 12px !important;
-  transition: all 0.3s ease;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: 0.3s;
 }
 
 /* Hover Effect */
 .medicine-card:hover {
-  border-color: #1677ff !important;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  transform: translateY(-4px);
 }
 
 /* Section separation inside card */

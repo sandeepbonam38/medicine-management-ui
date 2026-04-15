@@ -66,8 +66,8 @@ const MedicinesTable: React.FC = () => {
       try {     
         setLoading(true);
         const result = await getMedicines();
-        // setData(result);
-        setData(sampleJson);
+        setData(result);
+        //setData(sampleJson);
       }catch (error) {
         message.error("Failed to load medicines");
       } finally {
@@ -129,41 +129,45 @@ const MedicinesTable: React.FC = () => {
     });
 
   //grid colur logic
-  const getGridStyle = (item: Medicine) => {
+ const getGridStyle = (item: Medicine) => {
   const today = new Date();
   const expiry = new Date(item.expiryDate);
 
-    const diffDays = Math.ceil(
-      (expiry.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
-    );
+  const diffDays = Math.ceil(
+    (expiry.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+  );
 
-    if (diffDays < 30) {
-      return {
-        backgroundColor: "#fff1f0",
-        border: "1px solid #ff4d4f",
-        borderRadius: "10px",
-        padding: "8px"
-      };
-    }
+  const isExpiringSoon = diffDays < 30;
+  const isLowStock = item.quantity < 10 && diffDays > 30;
 
-    if (item.quantity < 10) {
-      return {
-        backgroundColor: "#fffbe6",
-        border: "1px solid #faad14",
-        borderRadius: "10px",
-        padding: "8px"
-      };
-    }
-
+  if (isExpiringSoon) {
     return {
+      backgroundColor: "#fff1f0",
+      borderLeft: "5px solid #ff4d4f",
+      borderRadius: "10px",
       padding: "8px"
     };
+  }
+
+  if (isLowStock) {
+    return {
+      backgroundColor: "#fff1f0",
+      borderLeft: "5px solid #dbf85a",
+      borderRadius: "10px",
+      padding: "8px"
+    };
+  }
+
+  // ⚪ Default
+  return {
+    padding: "8px"
   };
+};
 
 
   return (
   <div className="medicine-container">
-  <h2 className="medicine-title">💊 Medicines Grid</h2>
+  <h2 className="medicine-title">💊 Medicines Dashboard</h2>
      
 
      <div style={{ display: "flex", gap: 16, marginBottom: 20, flexWrap: "wrap" }}>
@@ -231,7 +235,9 @@ const MedicinesTable: React.FC = () => {
 
                 <p>
                   <b>📅 Expiry:</b>
-                  <Tag color="red">{item.expiryDate}</Tag>
+                  <Tag color="red">
+                    {new Date(item.expiryDate).toLocaleDateString()}
+                  </Tag>
                 </p>
 
                 <p>
